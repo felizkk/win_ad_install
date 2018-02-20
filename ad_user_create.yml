@@ -1,0 +1,10 @@
+---
+# Creating Windows AD Users 
+- name: Create Windows AD Users
+  hosts: windows
+  gather_facts: true 
+  vars_files:
+    - user_info_var.yml
+  roles:
+    - {name: win_domain_user, target_users: "{{ user_info }}", tags: 'create_user'}
+...

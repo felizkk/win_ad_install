@@ -1,0 +1,16 @@
+---
+- name: Enable Windows Firewall Rule 
+  win_firewall_rule:
+    name: "{{ item.name }}"
+    localport: "{{ item.port }}"
+    protocol: "{{ item.protocol }}"
+    action: allow
+    direction: in
+    state: present
+    enabled: yes 
+  when: ansible_distribution == "Microsoft Windows Server 2012 R2 Standard"
+  with_items:
+    - "{{ target_rules }}"
+  tags:
+    - enable_firewall 
+...

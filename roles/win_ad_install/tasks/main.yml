@@ -1,0 +1,38 @@
+---
+# Checking Variable
+- debug: var=GUID
+- debug: var=ansible_password
+- debug: var=ad_domain_name
+- debug: var=ad_safe_mode_password
+- debug: var=ad_admin_user
+- debug: var=ad_admin_password
+
+# Install AD-Domain-Services Features
+- name: Install Active Directory
+  win_feature:
+    name: AD-Domain-Services
+    state: present
+
+# Setup Domain Contoller
+- name: Setup Windows Domain
+  win_domain:
+    dns_domain_name: "{{ ad_domain_name }}"
+    safe_mode_password: "{{ ad_safe_mode_password }}"
+  register: domain_result
+
+# Reboots instance once completed
+- name: Reboot server once domain is set
+  win_reboot:
+  when: domain_result.reboot_required
+
+- name: Waiting until Windows host is ready
+  wait_for_connection:
+
+# Execute shell command once reboot is done
+# nltest /dclist:"{{ ad_domain_name }}"
+- name: Query Windows Domain
+  win_command: nltest /dclist:"{{ ad_domain_name }}"
+  register: nltest_result
+
+- debug: var=nltest_result
+...

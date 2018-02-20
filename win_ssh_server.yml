@@ -1,0 +1,12 @@
+---
+# Installing OpenSSH Server on Windows
+- name: Windows OpenSSH Server - installation, auto Start, and firewall rules
+  hosts: windows
+  gather_facts: true 
+  vars_files:
+    - ssh_var.yml
+  roles:
+    - {name: win_package_install, target_packages: [ { name: '{{ package_name }}', param: '{{ parameters }}' } ], tags: 'install_package'}
+    - {name: win_service_manage, target_services: [ { name: '{{ service_name }}' } ], tags: 'enable_service'}
+    - {name: win_firewall, target_rules: [ { name: '{{ service_name }}', port: '{{ local_port }}', protocol: '{{ protocol_name }}' } ], tags: 'enable_firewall'}
+...

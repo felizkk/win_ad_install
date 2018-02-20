@@ -1,0 +1,9 @@
+---
+- name: Install Windows Active Directory Services
+  hosts: windows
+  gather_facts: false
+  vars_files:
+    - my_ad_vars.yml
+  roles:
+    - win_ad_install
+...
